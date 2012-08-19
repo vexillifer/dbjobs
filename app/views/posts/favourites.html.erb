@@ -1,0 +1,42 @@
+
+<div class="page-header"><h2>Favourites</h2></div>
+<%= render :partial => "subnav" %>
+
+
+
+<%= form_for posts_favourites_path, :html => { :class => 'form-horizontal' } do |f|%>  
+
+
+<!-- Posting Table -->
+
+<% if @posts.empty? %>
+You have no favourite posts. You can favourite posts by selecting the  <%= image_tag("glyphicons_012_heart.png", :alt => "FavouritesIcon", :class => 'icon-padding', :style => "opacity: 0.3;") %>  for that post.
+<% else %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Date Posted</th>
+      <th>Title</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+    <tr>
+      <td><%= post.created_at.strftime("%m/%d/%Y") %></td>
+      <td><%= link_to post.title, post %></td>
+      <td>
+        <%= get_status(post.status) %>
+      </td>
+    </tr>
+    <% end %>
+
+  </tbody>
+</table>
+
+<div class="pull-right" >
+<%= link_to "Clear Favourites", {:controller => 'posts', :action => 'unfavourite', :user_id => current_user.id}, :class => "btn btn" %>
+</div>
+<% end %>
+<%end %>

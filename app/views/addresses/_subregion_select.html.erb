@@ -1,0 +1,15 @@
+<div id="post_state_code_wrapper">
+  <% parent_region ||= params[:parent_region] %>
+  <% country = Carmen::Country.coded(parent_region) %>
+
+	<%= fields_for :address do |addr| %>
+	  <% if country.nil? %>
+	    <em>Please select a country above</em>
+	  <% elsif country.subregions? %>
+	    <%= addr.subregion_select :state_code, parent_region %>
+	  <% else %>
+	    <%= addr.text_field :state_code %>
+	  <% end %>
+	<% end %>
+  
+</div>

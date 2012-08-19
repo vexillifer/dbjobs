@@ -1,0 +1,41 @@
+
+
+<% if params[:initial] %>
+<div class="page-header"><h2>Activate Account</h2></div>
+<% else %>
+<div class="page-header"><h2>Change your password</h2></div>
+<% end %>
+
+<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => 'form-horizontal' }) do |f| %>
+
+<%= devise_error_messages! %>
+<%= f.hidden_field :reset_password_token %>
+
+<div class="control-group">
+  <%= label :password, 'New Password', :class => 'control-label' %>
+  <div class="controls">
+    <%= f.password_field :password %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= label :password_confirmation, 'Confirm new Password', :class => 'control-label' %>
+  <div class="controls">
+    <%= f.password_field :password_confirmation %>
+  </div>
+</div>
+
+<div class="form-actions">
+	<% if params[:initial] %>
+	<%= f.submit "Activate my account", :class => "btn btn-primary" %>
+	<% else %>
+	<%= f.submit "Change my password", :class => "btn btn-primary" %>
+	<% end %>
+</div>
+<% end %>
+
+<% if params[:initial] %>
+Activation not working?
+<%= link_to "Request a new activation token", new_password_path(resource_name) %> <br/><br/>
+<% end %>
+<%= render "links" %>

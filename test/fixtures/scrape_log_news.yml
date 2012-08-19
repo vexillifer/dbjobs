@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  dbworld_date: 2012-05-18
+  dbworld_link: MyString
+  post_id: 1
+  user_id: 1
+
+two:
+  dbworld_date: 2012-05-18
+  dbworld_link: MyString
+  post_id: 1
+  user_id: 1

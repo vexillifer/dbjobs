@@ -1,0 +1,47 @@
+
+<fieldset>
+ <div class="control-group">
+    <%= f.label :address, 'Location', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :address, :class =>'text_field' %>
+      <span class="help-inline"><i>ex: Vancouver, Canada</i></span>
+    </div>
+  </div>
+
+
+  <div class="control-group">
+    <%= f.label :education_level, 'Minimum Education Level', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :education_level, EducationLevel.all.collect {|p| [ p.education, p.id ] }, {:include_blank => 'None'}, :class => 'select' %>
+    </div> 
+  </div>
+
+
+  <div class="control-group">
+    <%= label :position_type, 'Position Term', :class => 'control-label' %>
+    <div class="controls">
+      <% for position in PositionType.all %>
+      <div>
+        <% if params[:type].nil? %>
+        <%= check_box_tag "type[]", position.id %>
+        <% else %>
+          <%= check_box_tag "type[]", position.id, params[:type].include?(position.id.to_s) %>
+        <% end%>
+        <%= label_tag "type[]", position.position %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+    <div class="control-group">
+    <%= f.label :public, 'Visibility', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :visible %>
+      <span class="help-inline">Display job preference on your profile</span> <br />
+      <%= f.check_box :searchable %>
+      <span class="help-inline">dbjobs users can search you by your job preference</span>
+    </div>
+  </div> 
+
+
+</fieldset>

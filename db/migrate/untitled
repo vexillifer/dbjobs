@@ -1,0 +1,10 @@
+class AddVisibleBooleanToProfiles < ActiveRecord::Migration
+  def change
+  	drop_column :profiles, :public
+  	drop_column :job_preferences, :visible
+  	drop_column :job_preferences, :searchable
+    add_column :profiles, :public, :boolean, :default => 'true'
+    add_column :job_preferences, :visible, :boolean, :default => 'true'
+    add_column :job_preferences, :searchable, :boolean, :default => 'true'
+  end
+end

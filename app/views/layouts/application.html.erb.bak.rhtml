@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dbjobs</title>
+	<%= stylesheet_link_tag    "application", :media => "all" %>
+	<%= javascript_include_tag "application"%>
+	<%= javascript_include_tag "gmaps4rails/googlemaps" %>
+	<%= javascript_include_tag "bootstrap" %>
+	<%= yield :head %>
+	<%= csrf_meta_tags %>
+</head>
+<body>
+
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="#">dbjobs</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li><%= link_to "News" %></li>
+						<li><%= link_to "Postings", posts_path %></li>
+						<li><%= link_to "Profiles", users_path %></li>
+						<% if user_signed_in? %>
+						<li><%= link_to "Account", user_path(current_user) %></li>
+						<% else %>
+						<li><%= link_to "Account", new_user_session_path %></li>
+						<% end %>
+						<li><%= render 'devise/menu/login_items' %></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="subnav-fixed offset1 span12">	
+				<ul class="nav">
+					<li><%= link_to "Sub1" %></li>
+					<li><%= link_to "Sub2", posts_path %></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span9">
+				<%= yield %>
+				<%= yield :javascript %>
+				<%= yield :scripts %>
+			</div>
+		</div>
+
+
+		<p class="alert-messages"><%= alert %></p>
+		<p style="color: green"><%= notice %></p>
+
+
+
+		<footer>
+			<p>University of British Columbia, 2012</p>
+		</footer>
+	</div>
+
+
+
+
+</body>
+</html>
+

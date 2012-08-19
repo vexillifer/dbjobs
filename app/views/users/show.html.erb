@@ -1,0 +1,70 @@
+<div class="page-header">
+<% if @profiles.nil?  || ( !@profiles.public? && !(current_user.id == @user.id || current_user.admin?))%>
+	<h2></h2>
+<% else %>
+	<h2><%= @profiles.name %></h2>
+<% end %>
+</div>
+<%= render :partial => 'subnav' %>
+
+<%= form_for user_path, :html => { :class => 'form-horizontal'}, :method => 'get' do |f|%>
+
+<!-- If the current user is the profile's owner or an admin -->
+<% if current_user.id == @user.id || current_user.admin? %>
+	<% if @profiles.nil? %>
+		<%= "You do not have a profile" %>
+	<% else %>
+		<%= render @profiles %>
+		<%= render 'linkedin' unless @linkedin.nil?%>
+	<% end %>
+
+	<div class="form-actions">
+		<% if @profiles.nil? %>
+		<%= link_to "Create Profile", new_user_profile_path(@user), :class => "btn btn-primary"%>
+		<% else %>
+		<!-- If user has a profile, let them edit and integrate linkedin -->
+		<%= link_to "Edit Profile", edit_user_profile_path(@user, @profiles), :class => "btn btn" %> 
+			<% if @profiles.linkedin.nil? %>
+			<%= link_to "Integrate LinkedIn", {:controller => :users, :action => :linkedin, :id => current_user.id}, :class => "btn btn" %> 
+			<% else %>
+			<%= link_to "Update LinkedIn", {:controller => :users, :action => :linkedin, :id => current_user.id}, :class => "btn btn" %> 
+			<% end %>
+		<% end %>
+		<%= link_to "Account Settings", edit_user_registration_path, :class => "btn btn" %>
+	</div>
+<% else %>
+	<% if @profiles.nil? || @profiles.public? == false %>
+		<%= "This user does not have a public profile" %>
+	<% else %>
+		<%= render @profiles %>
+		<%= render 'linkedin' unless @linkedin.nil?%>
+
+		<% end %>
+
+		<!-- If the job preference is set to visible, show here -->
+		<% unless @job_pref.nil? || @job_pref.visible? == false %>
+		<h3>Job Preference</h3>
+		<br />
+
+		<%= render @job_pref %>
+
+		<% end %>
+	<% end %>
+
+
+
+
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+

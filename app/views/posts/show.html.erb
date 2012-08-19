@@ -1,0 +1,180 @@
+<div class="page-header">
+<div class="pull-right">
+  <% if current_user.present? %>
+  <% unless @favourite.nil? %>
+    <%= link_to image_tag("glyphicons_012_heart.png", :alt => "favourite", :class => 'icon-padding' ), {:controller => 'posts', :action => 'favourite', :post_id => @post.id, :user_id => current_user.id}, :rel => "tooltip", :'data-original-title' => "Favourite this post" %>
+  <% else %>
+    <%= link_to image_tag("glyphicons_012_heart.png", :alt => "favourite", :class => 'icon-padding', :style => "opacity: 0.3;" ), {:controller => 'posts', :action => 'favourite', :post_id => @post.id, :user_id => current_user.id} %>
+    <% end %>
+  <% end %>
+  <!-- TODO check if user exists -->
+</div>
+
+  <h2>Job Post</h2></div>
+<%= render :partial => "subnav" %>
+
+<%= form_for @post, :html => { :class => 'form-horizontal' } do |f| %>
+
+
+<div class="control-group">
+  <%= label :title_lab, 'Title', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+      <%= @post.title %>
+    </div>
+  </div>
+</div>
+
+
+<div class="control-group">
+  <%= label :start_lab, 'Start Date', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+      <% if @post.start.nil?  %>
+      <%= 'Not Specified' %>
+      <% elsif @post.start <= Date.today %>
+      <%= 'ASAP' %>
+      <% else %>
+      <%= (@post.start).strftime("%B %d, %Y") %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= label :expiry_lab, 'Post Expiry', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+      <% if @post.expiry.nil?  %>
+      <%= 'Not Specified'%>
+      <% else %>
+      <%= (@post.expiry).strftime("%B %d, %Y")%>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= label :education_level_lab, 'Minimum Education Level', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+      <%= if @post.education_level.nil?
+        'None'
+        else EducationLevel.find(@post.education_level).education end %>
+      </div>
+    </div> 
+  </div>
+
+
+  <div class="control-group">
+    <%= label :position_area_lab, 'Primary Position Area', :class => 'control-label' %>
+    <div class="controls">
+      <div class="text">
+        <%= if @post.position_area.nil? 
+          'None'
+          else PositionArea.find(@post.position_area).area end %>
+        </div>
+      </div> 
+    </div>
+
+    <div class="control-group">
+      <%= label :employment_class_lab, 'Employment Classification', :class => 'control-label' %>
+      <div class="controls">
+        <div class="text">
+          <%= if @post.employment_class.nil? 
+            'None'
+            else EmploymentClass.find(@post.employment_class).classification end %>
+          </div>
+        </div> 
+      </div>
+
+
+      <div class="control-group">
+        <%= label :position_type_lab, 'Position Type', :class => 'control-label' %>
+        <div class="controls">
+          <div class="text">
+            <% @position_type = Post.c_type(params) %>
+            <% if @position_type.empty? %>
+            <%= 'None' %>
+            <% end %>
+            <% @position_type.each do |type| %>
+            <div><%= type %></div>
+            <% end %>
+          </div>
+        </div> 
+      </div>
+
+<%unless @post.address.nil? %>
+      <div class="control-group">
+        <%= label :address, 'Location', :class => 'control-label' %>
+        <div class="controls">
+          <div class="text">
+            <%= @post.address.street unless @post.address.street.nil? %>
+            <%= @post.address.city unless @post.address.city.nil? %>
+            <%= @post.address.state_code unless @post.address.state_code.nil? %>
+            <%= @post.address.country_code unless @post.address.country_code.nil? %>
+          </div>
+        </div> 
+      </div>
+      <% end %>
+
+      <div class="control-group">
+        <%= label :desc_lab, 'Description', :class => 'control-label' %>
+        <div class="controls">
+          <div class="text">
+            <%= @markdown %>
+          </div>
+        </div>
+      </div>
+
+      <% unless @post.info.path.nil? %>
+      <div class="control-group">
+        <%= label :post_info, 'Attachments', :class => 'control-label' %>
+        <div class="controls">
+          <div class="text">
+            <%= link_to "Post Information", download_post_info_path %>
+          </div>
+        </div>
+      </div>
+      <% end %>
+
+
+      <br />
+
+      <div class="field">
+        <%= f.hidden_field :status, :value => '1' %>  
+      </div>
+      <% if current_user.present? %>
+      <div class="form-actions">
+        <% if current_user.id == @post.poster_id || current_user.admin? %>
+        <%= link_to 'Edit', edit_post_path(@post), :class=> "btn btn" %> 
+        <% end %>
+        <% if current_user.id == @post.poster_id || current_user.admin? %>
+        <%= link_to 'Delete', @post, :method => :delete, :class=> "btn btn"%> 
+        <% end %>
+        <% if current_user.admin? && @post.status == 0 %>
+        <%= f.submit 'Approve', :class=> "btn btn-success" %>
+        <a type="button" class="btn btn-danger" href="#reject_modal" data-toggle="modal">Reject</a>
+        <% end %>
+
+        <!-- Resubmit rejected post  -->
+        <% if @post.status == 3 && (current_user.id == @post.poster_id || current_user.admin?) %>
+        <%= f.submit 'Re-Submit', :onclick => {:status => '0'}, :class=> "btn btn-success" %>
+        <% end %>
+      </div>
+      <% end %>
+      <!-- rejections message modal -->
+      <div class="modal fade" id="reject_modal">
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal">×</button>
+          <h3>Reason for Rejection</h3>
+        </div>
+        <div class="modal-body">
+          <%= text_area_tag :text, "", :class => "text_area" %>
+        </div>
+        <div class="modal-footer">
+          <%= f.submit 'Confirm', :class=> "btn btn-danger" %> 
+        </div>
+      </div>
+
+      <%end%>

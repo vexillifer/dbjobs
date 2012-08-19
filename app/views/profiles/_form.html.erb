@@ -1,0 +1,52 @@
+<%= form_for [@user, @profile], :url => user_profile_path(@user, @profile), :html => { :class => 'form-horizontal'} do |f| %>
+
+<div class="control-group">
+    <%= f.label :name, 'Name', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class =>'text_field' %>
+    </div>
+  </div>
+
+<div class="control-group">
+    <%= f.label :phone, 'Phone', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :phone, :class =>'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :pref_email, 'Preferred Email', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :pref_email, :class =>'text_field' %>
+      <span class="help-inline"><i>this email will be displayed in your profile</i></span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :bio, 'About me', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :bio, :class =>'text_area', :style =>'height:150px;' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :resume, 'Attach resume (PDF)', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :resume %>
+    </div>
+  </div> 
+
+  <div class="control-group">
+    <%= f.label :public, 'Visibility', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :public %>
+      <span class="help-inline">Make profile public to dbjobs users</span>
+    </div>
+  </div> 
+
+<div class="form-actions">
+    <%= f.submit :class => 'btn btn-primary'%>
+    <%= link_to 'Cancel', user_path(@user), :class => "btn btn"%>
+  </div>
+
+  <% end %>

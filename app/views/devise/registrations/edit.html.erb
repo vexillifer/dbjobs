@@ -1,0 +1,48 @@
+<div class="page-header"><h2>Edit <%= resource_name.to_s.humanize %></h2></div>
+
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :class => 'form-horizontal' }) do |f| %>
+
+<%= devise_error_messages! %>
+
+
+<div class="control-group">
+  <%= label :email, 'Email', :class => 'control-label' %>
+  <div class="controls">
+    <%= f.email_field :email %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= label :password, 'New Password', :class => 'control-label' %>
+  <div class="controls">
+    <%= f.password_field :password, :autocomplete => "off" %>
+    <span class="help-inline"><i>leave blank if you don't want to change it</i></span>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= label :password_confirmation, 'Confirm new Password', :class => 'control-label' %>
+  <div class="controls">
+    <%= f.password_field :password_confirmation %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= label :current_password, 'Current Password', :class => 'control-label' %>
+  <div class="controls">
+    <%= f.password_field :current_password %>
+    <span class="help-inline"><i>we need your current password to confirm your changes</i></span>
+  </div>
+</div>
+
+
+<div class="form-actions">
+  <%= f.submit "Update", :class => "btn btn-primary" %>
+  <%= link_to "Back", :back, :class => "btn btn" %>
+</div>
+<% end %>
+
+<h3>Cancel my account</h3>
+
+<p>Unhappy? <%= link_to "Cancel my account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete %>.</p>
+

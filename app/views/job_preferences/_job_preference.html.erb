@@ -1,0 +1,25 @@
+<fieldset>
+
+<div class="control-group">
+  <%= label :education_level, 'Minimum Education Level', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+      <%= if @job_pref.education_level.nil?
+        'None'
+        else EducationLevel.find(@job_pref.education_level).education end %>
+      </div>
+    </div> 
+  </div>
+
+  <div class="control-group">
+  <%= label :address, 'Near Location', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+      <%= if @job_pref.address.nil? || @job_pref.address.eql?('')
+        'None'
+        else @job_pref.address end %>
+      </div>
+    </div> 
+  </div>
+
+</fieldset>

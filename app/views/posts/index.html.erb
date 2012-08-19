@@ -1,0 +1,232 @@
+
+
+<div class="page-header">
+<div class="pull-right">
+  <a href="#" rel="tooltip" title="Leave as current date for a status of 'ASAP'"><%= link_to image_tag("glyphicons_073_signal.png", :alt => "RSS Feed", :class => 'icon-padding' ), posts_path(:rss), :rel => "tooltip", :'data-original-title' => "RSS Feed"%></a>
+</div>
+  <h2>Job Postings</h2>  
+</div>
+
+
+<%= render :partial => "subnav" %>
+
+<!-- Search -->
+
+<%= form_for posts_path, :html => { :class => 'form-horizontal'}, :method => 'get' do |f|%>
+
+
+
+<fieldset>
+  <div class="control-group">
+    <%= label :keyword, 'Search', :class => 'control-label' %>
+    <div class="controls">
+      <%= text_field_tag :keyword, params[:keyword], :class => 'input-xlarge focused'%>
+    </div>
+  </div>
+
+
+  <!-- If advanced search hidden, display fields -->
+  
+  <div class="control-group" id="advanced">
+    <% if (params[:addr] && params[:addr] != '') || (params[:dist] && params[:dist] != '') || (params[:edu] && params[:edu] != 'None') || params[:class] || params[:type] || params[:area]%>
+      <%= label :advanced_lab, 'Query restrictions', :class => 'control-label' %>
+      <div class="controls">
+        <div class="text">
+          <!-- Go through cases  -->
+          <%= "Location: #{params[:addr]}; " unless !(params[:addr] && params[:addr] != '') %>
+          <%= "Minimum Education; " unless !(params[:edu] && params[:edu] != 'None')%>
+          <%= "Primary Area; " unless !params[:area]%>
+          <%= "Employment Type; " unless !params[:class]%>
+          <%= "Position Term; " unless !params[:type]%>
+
+      </div>
+    </div>
+
+  <% end %>
+  </div>
+
+
+  <div class="control-group" id="edu">
+    <%= label :education_level, 'Minimum Education Level', :class => 'control-label' %>
+    <div class="controls">
+      <%= select_tag :edu, 
+      options_for_select(EducationLevel.find(:all).collect{|p| [p.education, p.id]}.insert(0, 'None'), params[:edu]), :class => 'select' %>
+    </div>
+  </div>
+
+  <div class="control-group" id="addr">
+    <%= label :addr, 'Near Location', :class => 'control-label' %>
+    <div class="controls">
+      <%= text_field_tag :addr, params[:addr], :class => 'text_field' %>
+      <span class="help-inline"><i>ex: Vancouver, Canada</i></span>
+    </div>
+  </div>
+
+  <div class="control-group" id="area">
+    <%= label :primary_area, 'Primary Area', :class => 'control-label' %>
+    <div class="controls">
+      <% for area in PositionArea.all %>
+      <div>
+        <% if params[:area].nil? %>
+        <%= check_box_tag "area[]", area.id %>
+        <% else %>
+          <%= check_box_tag "area[]", area.id, params[:area].include?(area.id.to_s)%> 
+        <% end%>
+        <%= label_tag "area[]", area.area%>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="control-group" id="class">
+    <%= label :classification, 'Employment Type', :class => 'control-label' %>
+    <div class="controls">
+      <% for classification in EmploymentClass.all %>
+      <div>
+        <% if params[:class].nil? %>
+        <%= check_box_tag "class[]", classification.id %>
+        <% else %>
+          <%= check_box_tag "class[]", classification.id, params[:class].include?(classification.id.to_s) %>
+        <% end%>
+        <%= label_tag "class[]", classification.classification  %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="control-group" id="type">
+    <%= label :position_type, 'Position Term', :class => 'control-label' %>
+    <div class="controls">
+      <% for position in PositionType.all %>
+      <div>
+        <% if params[:type].nil? %>
+        <%= check_box_tag "type[]", position.id, false, {:id => "type_#{position.id}"} %>
+        <% else %>
+          <%= check_box_tag "type[]", position.id, params[:type].include?(position.id.to_s), {:id => "type_#{position.id}"} %>
+        <% end%>
+        <%= label_tag "type[#{position.id}]", position.position %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= submit_tag "Search", :name => nil, :class => "btn btn-primary" %>
+      
+    <!-- Check if user is present and has a job preference to search by -->
+    <% unless @job_pref.nil? %>
+    <%= link_to "Search Job Preference", {:action => 'search_job_pref'}, :class => "btn btn" %>
+    <%end%>
+
+    <%= button_to_function "Advanced Search", "showElement('searchForm')", :class => "btn btn", :id =>  'showSearch' %>
+    <%= button_to_function "Hide Advanced Search", "hideElement('searchForm')", :class => "btn btn", :id =>  'hideSearch' %>
+    <%= link_to "Clear Search", posts_path, :class => "btn btn" %>
+  </div>
+</fieldset>
+
+
+
+<%end%>
+
+
+<!-- Map  -->
+
+<%= form_for posts_path, :method => 'get' do |f|%>
+<!-- 
+<div id="map" style="width:658px;height:347px">
+ <%= stylesheet_link_tag 'gmaps4rails' %>
+ <%= gmaps4rails(@json, false, true) %>
+</div>
+ -->
+<%= gmaps4rails(@json) %>
+
+
+<div class="form-actions" id="map_buttons">
+  <center>
+<%= button_to_function "    Map    ", "showElement('map')", :class => "btn btn", :id =>  'showMap'%>
+<%= button_to_function "  Hide Map  ", "hideElement('map')", :with => "'msg='no_map", :class => "btn btn", :id =>  'hideMap' %></center>
+</div>
+
+
+
+
+<% end %>
+
+
+<script>
+
+
+  function showElement(id) {
+    if(id == "map") {
+      document.getElementById('showMap').style.display = 'none';
+      document.getElementById('hideMap').style.display = 'inline-block';
+      document.getElementById('map').style.display = 'inline-block';
+      Gmaps.loadMaps();
+    } else if (id == 'searchForm') {
+      document.getElementById('showSearch').style.display = 'none';
+      document.getElementById('hideSearch').style.display = 'inline-block';
+      document.getElementById('advanced').style.display = 'none';
+      document.getElementById('edu').style.display = 'block';
+      document.getElementById('addr').style.display = 'block';
+      document.getElementById('class').style.display = 'block';
+      document.getElementById('area').style.display = 'block';
+      document.getElementById('type').style.display = 'block';
+    }
+  }
+  function hideElement(id) {
+    if(id == "map") {
+      document.getElementById('hideMap').style.display = 'none';
+      document.getElementById('showMap').style.display = 'inline-block';
+      document.getElementById(id).style.display = 'none';
+    } else if (id == 'searchForm') {
+      document.getElementById('showSearch').style.display = 'inline-block';
+      document.getElementById('hideSearch').style.display = 'none';
+      document.getElementById('advanced').style.display = 'block';
+      document.getElementById('edu').style.display = 'none';
+      document.getElementById('addr').style.display = 'none';
+      document.getElementById('class').style.display = 'none';
+      document.getElementById('area').style.display = 'none';
+      document.getElementById('type').style.display = 'none';
+    }
+  }
+
+  hideElement('searchForm');
+  document.observe(document.getElementById('map'), 'load', hideElement('map'));
+</script>
+
+<% if @posts.empty? %>
+Your search did not return any posts.
+
+<br /><br/>Please note that new posts from DBWorld do not include some search parameters. Keyword search will be more effective for searching these posts.
+<% else %>
+<table class="table table-striped" id="search_table">
+  <thead>
+    <tr>
+      <th>Date Posted</th>
+      <th>Title</th>
+      <th>City</th>
+    </tr>
+  </thead>
+
+  <!-- TOD: fix inner join results in one result for each applicable position type -->
+  <tbody>
+    <% @posts.each do |post| %>
+    <tr>
+      <td><%= post.created_at.strftime("%B %d, %Y") %></td>
+      <td><%= link_to post.title, post %></td>
+      <td>
+      <% unless( post.address.nil? || post.address.city.nil? )%>
+      <%= post.address.city  %>
+      <% end %>
+    </td>
+    </tr>
+    <% end %>
+
+  </tbody>
+</table>
+
+  <div>
+  <center><%= will_paginate @posts, :renderer => BootstrapPagination::Rails%>
+  </div>
+  <% end %>
+</form>

@@ -1,0 +1,11 @@
+<% content_for :subnav do %>
+<div class="container">
+      <div class="subnav subnav-fixed"> 
+        <ul class="nav nav-pills">
+          <li><%= link_to "Search", users_path %></li>
+          <li><%= link_to "Your Profile", user_path(current_user) %></li>
+          <li><%= link_to "Job Preference", user_job_preference_path(current_user) %></li>
+        </ul>
+      </div>
+    </div>
+<% end %>

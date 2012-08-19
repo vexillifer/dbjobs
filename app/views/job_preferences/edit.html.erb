@@ -1,0 +1,15 @@
+<div class="page-header"><h2>Edit Job Preference</h2></div>
+<%= render :partial => "users/subnav"%>
+
+
+<%= form_for [@user, @job_pref], :url => user_job_preference_path, :html => { :class => 'form-horizontal'} do |f| %>
+
+<%= render :partial => 'form', :locals => { :f => f } %>
+
+
+
+<div class="form-actions">
+    <%= f.submit 'Update Job Preference', :class => 'btn btn-primary', :action => :update %>
+    <%= link_to 'Cancel', user_job_preference_path(@user), :class => "btn btn"%>
+  </div>
+<% end %>

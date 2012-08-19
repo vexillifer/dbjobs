@@ -1,0 +1,144 @@
+<%= form_for @post, :html => { :class => 'form-horizontal' } do |f| %>
+<% if @post.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+  <ul>
+    <% @post.errors.full_messages.each do |msg| %>
+    <li><%= msg %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+<fieldset>
+  <div class="control-group">
+    <%= f.label :education_level, 'Minimum Education Level', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :education_level, EducationLevel.all.collect {|p| [ p.education, p.id ] }, {:include_blank => 'None'}, :class => 'select' %>
+    </div> 
+  </div>
+
+  <div class="control-group">
+    <%= f.label :position_area, 'Primary Position Area', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :position_area, PositionArea.all.collect {|p| [ p.area, p.id ] }, {:include_blank => 'None'}, :class => 'select' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :employment_class, 'Employment type', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :employment_class, EmploymentClass.all.collect {|p| [ p.classification, p.id ] }, {:include_blank => 'None'}, :class => 'select' %>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= label :position_type, 'Position Term', :class => 'control-label' %>
+    <div class="controls">
+      <% for position in PositionType.all %>
+      <div>
+        <% if params[:id].nil? %>
+        <%= check_box_tag "post[position_types][]", position.id, false, {:id => "post_position_types_#{position.id}"}%>
+        <% else %>
+        <%= check_box_tag "post[position_types][]", position.id, Post.c_type(params).include?(position.position), {:id => "post_position_types_#{position.id}"} %>
+        <% end %>
+        <%= label_tag "post[position_types][#{position.id}]", position.position %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :job_start, 'Job Start Date', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datepicker :start, { class: 'input-small data-datepicker', 'data-date-format' => 'yyyy-mm-dd', value: Time.now.strftime("%Y-%m-%d")  } %>
+      <a href="#" rel="tooltip" title="Leave as current date for a status of 'ASAP'">?</a>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :job_expiry, 'Post Expiry Date', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datepicker :expiry, { class: 'input-small data-datepicker', 'data-date-format' => 'yyyy-mm-dd', value: (Time.now + 6.month).strftime("%Y-%m-%d")}  %>
+      <a href="#" rel="tooltip" title="The deadline for this post">?</a>
+    </div>
+  </div>
+
+
+  <script>
+
+  </script>
+
+  
+  <!-- For adding addresses -->
+  <%= f.fields_for :address do |addr| %>
+
+  <div class="control-group">
+    <%= addr.label :street, 'Street', :class => 'control-label' %>
+    <div class="controls">
+      <%= addr.text_field :street, :class => 'input' %>  
+    </div>
+  </div>  
+
+  <div class="control-group">
+    <%= addr.label :city, 'City', :class => 'control-label' %>
+    <div class="controls">
+      <%= addr.text_field :city, :class => 'text_field' %>  
+    </div>
+  </div>  
+
+  <div class="control-group">
+    <%= addr.label :city, 'Country', :class => 'control-label' %>
+    <div class="controls">
+      <%= addr.country_select :country_code, priority: %w(US CA), :prompt => 'Country' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= addr.label :state_code, 'Province/State:', :class => 'control-label' %>
+    <div class="controls">
+    <%= render :partial => 'addresses/subregion_select', :locals => { :post => @post } %>
+  </div>
+  </div>
+
+  <% end %>
+  
+  <br />
+
+
+  <div class="control-group">
+    <%= f.label :title, 'Title', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :title, :class => 'input' %>
+    </div>
+  </div>
+
+  
+  <div class="control-group">
+    <%= f.label :description, 'Description', :class => 'control-label' %>
+    <div class="controls">
+      <p>This text area supports Markdown for richer HTML posts. 
+        <br>
+        See the <%= link_to 'Quick Reference', "http://www.darkcoding.net/software/markdown-quick-reference/"%> or <%= link_to 'Documentation', "http://daringfireball.net/projects/markdown/syntax"%>  for details.</p>
+      <%= f.text_area :description, :class =>'text_area' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :info, 'Attach additonal post information (PDF)', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :info %>
+    </div>
+  </div> 
+  
+  <%if user_signed_in? %>
+
+  <div class="form-actions">
+    <%= f.submit :class => 'btn btn-primary'%>
+    <%= link_to 'Cancel', posts_path, :class => "btn btn"%>
+  </div>
+  <% end %>
+
+  <% end %>
+

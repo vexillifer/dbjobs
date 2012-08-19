@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  id: 
+  position_type: 
+  education_level: 
+  pref_email: MyString
+
+two:
+  id: 
+  position_type: 
+  education_level: 
+  pref_email: MyString

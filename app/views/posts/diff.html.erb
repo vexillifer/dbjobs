@@ -1,0 +1,6 @@
+<% @diff.each do |key, h| %>
+Score: <%= h[:score] %> <br/>
+<%= link_to "Post 1", "http://#{request.host_with_port}/posts/#{h[:p1]}" %> | 
+<%= link_to "Post 2", "http://#{request.host_with_port}/posts/#{h[:p2]}" %><br/>
+<br/>
+<% end %>

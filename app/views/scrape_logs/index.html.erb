@@ -1,0 +1,28 @@
+<div class="page-header">
+  <h2>dbworld Scrape</h2>  
+</div>
+
+
+<h4> Most recently scraped: </h4>
+<br />
+<%= "None" if @scrape_log.nil?%>
+<%= "Title: #{@scrape_post.title}" unless @scrape_post.nil?%> <br/ >
+<%= "Post ID: #{@scrape_log.post_id}" unless @scrape_log.nil? %> <br/ >
+<%= "Post Date: #{@scrape_log.dbworld_date}" unless @scrape_log.nil? %> <br/ >
+ <br/ >
+<%= "Scrape Time: #{@scrape_log.created_at}" unless @scrape_log.nil?%> <br/ >
+<%= "Scrape Link: #{@scrape_log.dbworld_link}" unless @scrape_log.nil?%> <br/ >
+
+<br/>
+<br/>
+<br/>
+<br/>
+Scrape Date URLs:<br/>
+<% @scrape_date_urls.each do |url| %>
+<%= url.dbworld_link %><br/>
+<%end%>
+
+
+<div class="form-actions">
+    <%= link_to "Perform Scrape", {:action => :scrape}, :class => "btn btn-primary" %>
+  </div>

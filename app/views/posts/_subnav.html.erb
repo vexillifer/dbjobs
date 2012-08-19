@@ -1,0 +1,18 @@
+<% content_for :subnav do %>
+<div class="container offset2">
+    <div class="row-fluid">
+      <div class="span9">
+        <div class="subnav subnav-fixed"> 
+          <ul class="nav nav-pills">
+            <li><%= link_to "Search", posts_path %></li>
+            <li><%= link_to "Favourites", posts_favourites_path if current_user.present? %></li>
+            <li><%= link_to "New Post", new_post_path if current_user.present? %></li>
+            <li><%= link_to "Your Posts", posts_owned_path if current_user.present? %></li>
+            <li><%= link_to "Pending Posts", posts_review_path if current_user.try(:admin?)%></li>
+            <li><%= link_to "Diff", posts_diff_path if current_user.try(:admin?)%></li>
+          </ul>
+        </div>
+    </div>
+  </div>
+</div>
+<% end %>

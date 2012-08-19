@@ -1,0 +1,46 @@
+
+<div class="page-header"><h2>Your Posts</h2></div>
+<%= render :partial => "subnav" %>
+
+
+
+<%= form_for posts_review_path, :html => { :class => 'form-horizontal' } do |f|%>  
+
+
+<!-- Posting Table -->
+
+<% if @posts.empty? %>
+You do not own any posts. New posts that your create will appear here.
+<% else %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Date Posted</th>
+      <th>Title</th>
+      <th>City</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+    <tr>
+      <td><%= post.created_at.strftime("%m/%d/%Y") %></td>
+      <td><%= link_to post.title, post %></td>
+      <td>
+        <% unless( post.address.nil? || post.address.city.nil? )%>
+        <%= post.address.city  %>
+        <% end %>
+      </td>
+      <td>
+        <%= get_status(post.status) %>
+      </td>
+    </tr>
+    <% end %>
+
+  </tbody>
+</table>
+<% end %>
+
+
+<%end %>

@@ -1,0 +1,8 @@
+
+<%= @addresses %>
+
+
+<div id="map" style="width:658px;height:347px">
+   <%= stylesheet_link_tag 'gmaps4rails' %>
+   <%= gmaps4rails(@json, false, true) %>
+</div>

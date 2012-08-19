@@ -1,0 +1,7 @@
+<%= form_for :f, :html => { :class => 'form-inline' } do %>
+
+	<% for area in PositionArea.all %>
+	        <%= label :area, area.area %>
+	        <%= check_box_tag "area[]", area.id, :class => 'checkbox' %>
+	 <% end %>
+ <% end %>

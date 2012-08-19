@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>dbjobs</title>
+  
+  <%= yield :head %>
+  <%= stylesheet_link_tag    "bootstrap_and_overrides", :media => "all" %>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "gmaps4rails/googlemaps" %>
+  <%= csrf_meta_tags %>
+  <%= auto_discovery_link_tag :rss, posts_path(:rss) %>
+</head>
+<body>
+
+
+
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="#">dbjobs  <beta class="beta">BETA</beta> </a>
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li><%= link_to "News", root_path %></li>
+            <li><%= link_to "Postings", posts_path %></li>
+            <li><%= link_to "Profiles", users_path %></li>
+            <% if user_signed_in? %>
+            <li><%= link_to "Account", user_path(current_user) %></li>
+            <% else %>
+            <li><%= link_to "Account", new_user_session_path %></li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="pull-right">
+          <ul class="nav" style="margin-left:20px;">
+            <li><%= render 'devise/menu/login_items' %></li>
+          </ul>
+        </div>
+        <form class="form-search navbar-search pull-right js-search-form" action="/posts" method="get" id="search_form">
+
+          <input type="text" name="keyword" id="search_query", class="search-query" placeholder="Search Job Postings" style="margin-right: -15px;">
+
+
+
+          <!-- For mobile -->
+          <div class="input-append" id="append_div" >
+            <span class="add-on">
+              <%= link_to '#', :onclick => "document.forms['search_form'].submit();", :id => "append_icon", :style => "color: #39B9AD; text-decoration: none" do %>
+                <i class="icon-search"></i>
+              <% end %>
+            </span>
+          </div>
+
+          <!-- Regular case, not overlayed           -->
+          <%= link_to '#', :onclick => "document.forms['search_form'].submit();", :id => "search_icon", :style => "color: #39B9AD; text-decoration: none; margin-left: -10px; margin-top:10px;" do %>
+                <i class="icon-search"></i>
+          <% end %>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+  <% if content_for?(:subnav) %>
+      <div><%= yield(:subnav) %></div>
+    <% end %>  
+  </div>
+
+  <div class="container-fluid offset2">
+    <div class="row-fluid">
+      <div class="span9">
+        <br /><br /><br />
+        <div>
+          <% if notice %>
+          <div class="alert alert-success">
+            <%= notice %>
+            <a class="close" data-dismiss="alert" href="#">×</a>
+          </div>
+          <% end %>
+          <% if alert %>
+          <div class="alert alert-error">
+            <%= alert %>
+            <a class="close" data-dismiss="alert" href="#">×</a>
+          </div>
+          <% end %>
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+    <%= yield :javascript %>
+    <%= yield :scripts %>
+    <br />
+    <br />
+    <br />
+    <footer>
+      <p>University of British Columbia, 2012</p>
+    </footer>
+  </body>
+  </html>
+

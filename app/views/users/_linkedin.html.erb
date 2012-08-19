@@ -1,0 +1,71 @@
+
+<fieldset>
+
+<!-- Set first positions to true to line additions -->
+<% first_position = true %>
+<% unless @linkedin["positions"].nil? || @linkedin["positions"].empty? %>
+  <div class="control-group">
+  <%= label :Experience, 'Experience', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+    	<% @linkedin["positions"].each do |id, position| %>
+    		<% unless first_position == true %>
+    			<hr/>
+			<% end %>
+			<h4><%= position["title"] %></h4> 
+			<%= position["company"] %><br/>
+
+			<div style="color:grey;">
+				<%= position["start_month"] %> 
+				<%= position["start_year"] %> -
+
+				<% if position["current"].to_s == "true" %>
+				Present
+				<% else %>
+				<%= position["end_month"] %> <%= position["end_year"] %><br/>
+				<% end %>
+			</div>
+			<% unless position["summary"].eql?("") || position["summary"] == nil%> 
+				<span>
+					<br/>
+					<%= position["summary"] %>
+				</span>
+				<br/>
+				<br/> 
+			<%end%>
+			<% first_position = false %>
+
+		<%end%>
+    </div>
+  </div>
+</div>
+<% end %>
+
+
+<% unless @linkedin["educations"].nil? || @linkedin["educations"].empty? %>
+  <div class="control-group">
+  <%= label :education, 'Education', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+    	<% @linkedin["educations"].each do |id, education| %>
+			<h4><%= education["school"] %></h4>
+			<%= education["degree"] %>, <%= education["field"] %><br/>
+
+			<div style="color:grey;">
+				<%= education["start_year"] %> - <%= education["end_year"] %><br/>
+			</div>
+			<% unless education["activities"].nil? || education["activities"].eql?("") %>
+				Activities: <%= education["activities"] %> <br/>
+			<% end %>
+
+			<br/>
+			<br/> 
+
+		<%end%>
+    </div>
+  </div>
+</div>
+<% end %>
+
+</fieldset>
+

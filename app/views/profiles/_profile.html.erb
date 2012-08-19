@@ -1,0 +1,54 @@
+
+
+<fieldset>
+
+
+<% unless profile.phone.nil? || profile.phone.eql?('') %>
+  <div class="control-group">
+  <%= label :phone, 'Phone', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+      <%= profile.phone %>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<div class="control-group">
+  <%= label :pref_email, 'Email', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+      <% if profile.pref_email.nil? || profile.pref_email.eql?('') %>
+      <%= @user.email %>
+      <% else %>
+      <%= profile.pref_email %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<% unless profile.bio.nil? || profile.bio.eql?('') %>
+<div class="control-group">
+        <%= label :bio, 'About me', :class => 'control-label' %>
+        <div class="controls">
+          <div class="text">
+            <%= @markdown %> 
+          </div>
+        </div>
+      </div>
+<% end %>
+
+ </fieldset>
+
+
+<% unless profile.resume.path.nil? %>
+      <div class="control-group">
+        <%= label :resume, 'Attachments', :class => 'control-label' %>
+        <div class="controls">
+          <div class="text">
+            <%= link_to "Resume", download_resume_path %>
+          </div>
+        </div>
+      </div>
+      <% end %>

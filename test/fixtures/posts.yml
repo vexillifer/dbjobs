@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  id: MyString
+  poster_id: 
+  start: 2012-02-25
+  expiry: 2012-02-25
+  status: 1
+  posted: 2012-02-25
+
+two:
+  id: MyString
+  poster_id: 
+  start: 2012-02-25
+  expiry: 2012-02-25
+  status: 1
+  posted: 2012-02-25

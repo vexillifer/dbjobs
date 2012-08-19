@@ -1,0 +1,50 @@
+<div class="page-header">
+	<h2>Job Preference</h2>
+</div>
+
+<%= render :partial => 'users/subnav' %>
+
+<%= form_for user_job_preference_path, :html => { :class => 'form-horizontal'} do |f| %>
+
+<% if @job_pref.nil? %>
+	<%= "You do not have a job preference" %>
+<% else %>
+	
+<fieldset>
+
+<div class="control-group">
+  <%= label :education_level_lab, 'Minimum Education Level', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+      <%= if @job_pref.education_level.nil?
+        'None'
+        else EducationLevel.find(@job_pref.education_level).education end %>
+      </div>
+    </div> 
+  </div>
+
+  <div class="control-group">
+  <%= label :address, 'Near Location', :class => 'control-label' %>
+  <div class="controls">
+    <div class="text">
+      <%= if @job_pref.address.nil? || @job_pref.address.eql?('')
+        'None'
+        else @job_pref.address end %>
+      </div>
+    </div> 
+  </div>
+
+</fieldset>
+
+<% end %>
+
+<div class="form-actions">
+	<% if @job_pref.nil? %>
+	<%= link_to "Create Job Preference", new_user_job_preference_path(@user), :class => "btn btn-primary"%>
+	<% else %>
+	<%= link_to "Edit Job Preference", edit_user_job_preference_path(@user, @job_pref), :class => "btn btn" %> 
+	<% end %>
+</div>
+
+<% end %>
+

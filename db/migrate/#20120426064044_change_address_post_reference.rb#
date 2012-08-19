@@ -1,0 +1,10 @@
+class ChangeAddressPostReference < ActiveRecord::Migration
+  self.up do
+  	  change_table :posts do |t|
+    	       t.references :posts
+    	  end
+  end
+
+  def down
+  end
+end

@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  prov_stateID: 1
+  prov_state: MyString
+
+two:
+  prov_stateID: 1
+  prov_state: MyString

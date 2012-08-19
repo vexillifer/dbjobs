@@ -1,0 +1,4 @@
+<% if @post.nil? || @post.title.nil? %>
+<% else %>
+<%= link_to @post.title, post_path(@post)  %>
+<% end %>
